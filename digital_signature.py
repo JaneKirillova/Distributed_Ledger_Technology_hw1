@@ -3,8 +3,41 @@ import random
 from sympy import mod_inverse, gcd, randprime
 
 
-def generate_prime(bits=10 ** 3) -> int:
-    return randprime(2 ** (bits - 1), 2 ** bits)
+def is_prime(n, k=30):
+    if n <= 3:
+        return n == 2 or n == 3
+    if n % 2 == 0:
+        return False
+
+    def check(a, s, d, n):
+        x = pow(a, d, n)
+        if x == 1:
+            return True
+        for i in range(s - 1):
+            if x == n - 1:
+                return True
+            x = pow(x, 2, n)
+        return x == n - 1
+
+    s, d = 0, n - 1
+    while d % 2 == 0:
+        s += 1
+        d //= 2
+
+    for _ in range(k):
+        a = random.randint(2, n - 1)
+        if not check(a, s, d, n):
+            return False
+    return True
+
+
+def generate_prime(bits=10 ** 3):
+    left = 2 ** (bits - 1)
+    right = 2 ** bits
+    while True:
+        p = random.randint(left, right)
+        if is_prime(p):
+            return p
 
 
 def get_different_primes():
