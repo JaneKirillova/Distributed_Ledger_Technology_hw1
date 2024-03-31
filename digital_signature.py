@@ -1,6 +1,7 @@
 import hashlib
+import math
 import random
-from sympy import mod_inverse, gcd, randprime
+# from sympy import mod_inverse, gcd, randprime
 
 
 def is_prime(n, k=30):
@@ -31,7 +32,7 @@ def is_prime(n, k=30):
     return True
 
 
-def generate_prime(bits=10 ** 3):
+def generate_prime(bits=256):
     left = 2 ** (bits - 1)
     right = 2 ** bits
     while True:
@@ -48,10 +49,27 @@ def get_different_primes():
             return p, q
 
 
+def extended_gcd(a, b):
+    print(a, b)
+    if b == 0:
+        return a, 1, 0
+    else:
+        gcd, x, y = extended_gcd(b, a % b)
+        return gcd, y, x - (a // b) * y
+
+
+def mod_inverse(d, m):
+    gcd, x, y = extended_gcd(d, m)
+    if gcd != 1:
+        raise ValueError(f"The modular inverse does not exist for {d} modulo {m}")
+    else:
+        return ((x % m) + m) % m
+
+
 def get_coprime(m):
     while True:
         d = random.randint(2, m - 1)
-        if gcd(m, d) == 1:
+        if math.gcd(m, d) == 1:
             return d
 
 
