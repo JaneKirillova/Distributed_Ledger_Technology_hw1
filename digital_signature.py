@@ -1,7 +1,6 @@
 import hashlib
 import math
 import random
-# from sympy import mod_inverse, gcd, randprime
 
 
 def is_prime(n, k=30):
